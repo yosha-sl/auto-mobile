@@ -1,10 +1,20 @@
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { VehicleModule } from './vehicle/vehicle.module';
+import { ormConfig } from "./orm.comfig";
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [BullModule.forRoot({
+    redis: {
+      host: 'localhost',
+      port: 6379
+    }
+  }),
+  VehicleModule,
+  TypeOrmModule.forRoot(ormConfig)
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
