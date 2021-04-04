@@ -1,6 +1,8 @@
+import { InjectQueue } from "@nestjs/bull";
 import { Injectable, Logger } from "@nestjs/common";
 import { Client, ClientProxy, Transport } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Queue } from "bull";
 import { Repository } from "typeorm";
 import { VehicleDTO } from "./vehicle.dto";
 import { Vehicle } from "./vehicle.entity";
@@ -13,6 +15,7 @@ export class VehicleService{
     // @Client({transport: Transport.TCP, options:{port: 3002}})
     // private dbService: ClientProxy;
     constructor(
+        @InjectQueue('vehicle_details_migration') private readonly audioQueue:Queue,
         @InjectRepository(Vehicle)private vehicleRepository:Repository<Vehicle>
     ){}
 
@@ -24,5 +27,9 @@ export class VehicleService{
         });
         this.vehicleRepository.save(newList);
         return ;
+    }
+
+    createVehicleCSVMigrationJob(file){
+        this.audioQueue.add('migrate',{file:file});
     }
 }

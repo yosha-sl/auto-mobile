@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { ormConfig } from "./orm.comfig";
+import { JobModule } from './job/job.module';
 
 @Module({
   imports: [BullModule.forRoot({
@@ -12,6 +13,7 @@ import { ormConfig } from "./orm.comfig";
     }
   }),
   VehicleModule,
+  JobModule,
   TypeOrmModule.forRoot(ormConfig)
   ],
   controllers: [],
