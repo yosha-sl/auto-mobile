@@ -12,6 +12,7 @@ export class UploadService {
   uploadCSVFile(file:File){
     var formData = new FormData();
     formData.append('csv', file);
+    formData.append('skid', sessionStorage.getItem('skid'));
     return this.http.post(`${environment.baseURL}/files/csv`, formData);
   }
 }

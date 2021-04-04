@@ -23,13 +23,13 @@ export class VehicleService{
     async addVehicle(data: VehicleDTO[]){
         let newList = data.map( vehicleDTO => new Vehicle(vehicleDTO));
         newList.forEach( (v: Vehicle, index) => {
-            this.logger.log(`${index} First Name : ${v.firstName} | Last Name : ${v.lastName}`);
+            //this.logger.log(`${index} First Name : ${v.firstName} | Last Name : ${v.lastName}`);
         });
         this.vehicleRepository.save(newList);
         return ;
     }
 
-    createVehicleCSVMigrationJob(file){
-        this.audioQueue.add('migrate',{file:file});
+    createVehicleCSVMigrationJob(file, skid){
+        this.audioQueue.add('migrate',{file:file, userSocketId: skid});
     }
 }

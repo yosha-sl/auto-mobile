@@ -10,6 +10,7 @@ import { HomeModule } from './home/home.module';
 import { NavComponent } from './nav/nav.component';
 import { NavModule } from './nav/nav.module';
 import { UploadModule } from './upload/upload.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { UploadModule } from './upload/upload.module';
     AppRoutingModule,
     HomeModule,
     UploadModule,
-    NavModule
+    NavModule,
+    NgbModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
