@@ -5,16 +5,19 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { HomeModule } from './home/home.module';
-import { NavComponent } from './nav/nav.component';
 import { NavModule } from './nav/nav.module';
 import { UploadModule } from './upload/upload.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { GraphQLModule } from './graphql.module';
+import { VehicleModule } from './vehicle/vehicle.module';
+import { ToastService } from './toast-service';
+import { ToastsContainer } from './toasts-container.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ToastsContainer
   ],
   imports: [
     BrowserModule,
@@ -25,9 +28,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     UploadModule,
     NavModule,
     NgbModule,
-    NgbModule
+    NgbModule,
+    GraphQLModule,
+    VehicleModule
   ],
-  providers: [],
+  providers: [ToastService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

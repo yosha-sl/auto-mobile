@@ -14,7 +14,7 @@ import { JobModule } from './job/job.module';
   }),
   VehicleModule,
   JobModule,
-  TypeOrmModule.forRoot(ormConfig)
+  TypeOrmModule.forRoot(ormConfig),
   ],
   controllers: [],
   providers: [],

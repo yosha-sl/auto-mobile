@@ -2,7 +2,7 @@
 
     <div class="form-group">
         <label for="csvUpload">Upload CSV</label>
-        <input type="file" class="form-control-file" id="csvUpload" (change)="handleFileInput($event)">
+        <input #myFileInput type="file" class="form-control-file" id="csvUpload" (change)="handleFileInput($event)">
     </div>
 
 </div>

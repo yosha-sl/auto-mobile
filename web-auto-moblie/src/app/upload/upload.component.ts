@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastService } from '../toast-service';
 import { UploadService } from './upload.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { UploadService } from './upload.service';
 })
 export class UploadComponent implements OnInit {
 
-  constructor(private uploadService:UploadService) { }
+  constructor(private uploadService:UploadService,
+    public toastService: ToastService) { }
 
   ngOnInit(): void {
   }
@@ -16,7 +18,8 @@ export class UploadComponent implements OnInit {
   handleFileInput(event:any) {
     let file:File = event?.target?.files[0];
     if(file)this.uploadService.uploadCSVFile(file).subscribe( res => {
-      alert('Sent');
+      this.toastService.show('CSV Uploading completed');
+      event.target.value = '';
     });
   }
     

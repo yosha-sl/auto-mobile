@@ -1,0 +1,48 @@
+<div class="container-fluid p-5">
+    <form name="form" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" name="firstName" [(ngModel)]="vehicle.firstName"/>
+    
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" name="lastName" [(ngModel)]="vehicle.lastName"/>
+    
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Email</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="vehicle.email"/>
+    
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" name="carMake" [(ngModel)]="vehicle.carMake"/>
+    
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" name="carModel" [(ngModel)]="vehicle.carModel"/>
+    
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" name="vinNumber" [(ngModel)]="vehicle.vinNumber"/>
+    
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" name="manufactured_date" [(ngModel)]="vehicle.manufactured_date"/>
+    
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update</button>
+      </form>
+</div>

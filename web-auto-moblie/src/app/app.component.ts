@@ -3,6 +3,7 @@ import * as io from 'socket.io-client';
 import { HttpClientModule, HttpClient, HttpRequest, HttpResponse, HttpEventType } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Guid } from 'guid-typescript';
+import { ToastService } from './toast-service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ export class AppComponent implements OnInit {
   migrationResult:[] = [];
   msgShow = false;
 
-  constructor() {
+  constructor(public toastService: ToastService) {
     this.socket = io(environment.baseURL);
   }
   
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
     this.socket.on('msgToClient', (fileName: any) => {
       console.log('Something has been recived :)')
       // this.migrationResult.push('Done');
-      this.msgShow = true;
+      this.showSuccess();
     });
   }
 
@@ -47,6 +48,20 @@ export class AppComponent implements OnInit {
 
   close() {
     this.msgShow = false;
+  }
+
+
+
+  showStandard() {
+    this.toastService.show('I am a standard toast');
+  }
+
+  showSuccess() {
+    this.toastService.show('I am a success toast', { classname: 'bg-success text-light', delay: 10000 });
+  }
+
+  showDanger(dangerTpl) {
+    this.toastService.show(dangerTpl, { classname: 'bg-danger text-light', delay: 15000 });
   }
 
 }

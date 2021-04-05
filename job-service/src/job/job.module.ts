@@ -1,10 +1,12 @@
-import { Module } from "@nestjs/common";
+import { HttpModule, HttpService, Module } from "@nestjs/common";
 import { from } from "rxjs";
-import { CSVUploadController } from "./csv-upload.controller";
+import { CSVDownloadController } from "./csv-download.controller";
+import { HelloService } from "./hello.service";
 
 @Module({
-    imports:[],
-    controllers: [CSVUploadController],
-    providers: []
+    imports:[HttpModule],
+    controllers: [CSVDownloadController],
+    providers: [HelloService],
+    exports: []
 })
 export class JobModule{}

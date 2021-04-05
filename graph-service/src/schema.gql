@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Vehicle {
+  id: Int!
+  firstName: String
+  lastName: String
+  email: String
+  carMake: String
+  carModel: String
+  vinNumber: String
+  manufactured_date: String
+}
+
+type Query {
+  vehicles: [Vehicle!]!
+  vehicle(id: Int!): Vehicle!
+}
+
+type Mutation {
+  createVehicle(createVehicleInput: CreateVehicleInput!): Vehicle!
+  updateVehicle(updateVehicleInput: UpdateVehicleInput!): Vehicle!
+  removeVehicle(id: Int!): Vehicle!
+}
+
+input CreateVehicleInput {
+  firstName: String
+  lastName: String
+  email: String
+  carMake: String
+  carModel: String
+  vinNumber: String
+  manufactured_date: String
+}
+
+input UpdateVehicleInput {
+  firstName: String
+  lastName: String
+  email: String
+  carMake: String
+  carModel: String
+  vinNumber: String
+  manufactured_date: String
+  id: Int!
+}
