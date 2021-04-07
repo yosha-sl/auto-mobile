@@ -2,8 +2,9 @@ import { NestMicroserviceOptions } from "@nestjs/common/interfaces/microservices
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 
 export const OPTIONS: NestMicroserviceOptions & MicroserviceOptions = {
-    transport: Transport.TCP,
-    options: {
-      port: 3001,
-    },
-  };
+  transport: Transport.REDIS,
+  options: {
+    port: 3004,
+    url: 'redis://localhost:6379',
+  },
+};

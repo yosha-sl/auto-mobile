@@ -13,7 +13,7 @@ import { VehicleModule } from './vehicle/vehicle.module';
   }), 
   TypeOrmModule.forRoot(ormConfig), VehicleModule
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule {}

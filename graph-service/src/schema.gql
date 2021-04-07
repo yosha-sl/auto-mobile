@@ -16,6 +16,7 @@ type Vehicle {
 type Query {
   vehicles: [Vehicle!]!
   vehicle(id: Int!): Vehicle!
+  download: [Vehicle!]!
 }
 
 type Mutation {

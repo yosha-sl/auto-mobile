@@ -31,16 +31,25 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         client.join(uuid);
     }
 
+    @SubscribeMessage('joinToCSVGen')
+    createConnectionForCSVGen(client: Socket, uuid: string): void {
+        console.log('Register to Gen CSV', uuid);
+        client.join(uuid);
+    }
 
-    @SubscribeMessage('alert')
-    sendAlert(client: Socket, uuid: string): void {
-        console.log('Send Alert', uuid);
+
+    // @SubscribeMessage('alert')
+    // sendAlert(client: Socket, uuid: string): void {
+    //     console.log('Send Alert', uuid);
+    //     this.server.to(uuid).emit('msgToClient');
+    // }
+
+    notifyUserToTranformationCompleted(uuid:string): void {
         this.server.to(uuid).emit('msgToClient');
     }
 
-    notifyUserToTranformationCompleted(uuid:string): void {
-        console.log('Send Transformation Completed', uuid);
-        this.server.to(uuid).emit('msgToClient');
+    sendUserToCSV(uuid:string): void {
+        this.server.to(uuid).emit('csvSource');
     }
 
 

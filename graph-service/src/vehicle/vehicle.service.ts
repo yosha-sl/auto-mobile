@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Client, ClientProxy, Transport } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateVehicleInput } from './dto/create-vehicle.input';
@@ -7,7 +8,7 @@ import { Vehicle } from './entities/vehicle.entity';
 
 @Injectable()
 export class VehicleService {
-
+  
   constructor(@InjectRepository(Vehicle)private readonly vehicleRepository:Repository<Vehicle>){}
 
   create(vehicleDTO: CreateVehicleInput) {
@@ -31,4 +32,5 @@ export class VehicleService {
   remove(id: number) {
     return this.vehicleRepository.delete(id);
   }
+
 }

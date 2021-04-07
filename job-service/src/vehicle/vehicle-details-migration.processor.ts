@@ -21,7 +21,7 @@ export class VehicleDetailsMigrationProcessor {
 
 
     @Process('migrate')
-    async migrateVehicleDetailsData(job: Job) {
+    migrateVehicleDetailsData(job: Job) {
         this.logger.log(job);
         // this.logger.log(`${path.join(__dirname, '..', '..','upload',job.data.fileName)}`); 
 
@@ -32,20 +32,13 @@ export class VehicleDetailsMigrationProcessor {
         const stream = fs.createReadStream(job.data.file.path, 'utf8');
 
         let val = { strict: true, separator: ',' };
-        await this.csvParser.parse(stream, VehicleDTO, undefined, undefined, val).then((res) => {
+         this.csvParser.parse(stream, VehicleDTO, undefined, undefined, val).then((res) => {
             this.vehicleService.addVehicle(res.list);
         });
     }
 
-    // async startMigration(){
-    //     await this.audioQueue.add('migrate',undefined);
-    // }
-
     @OnQueueCompleted()
     onCompleted(job: Job, result: any) {
-        console.log(
-            `Processing job compled user ID ${job.data.userSocketId}`,
-        );
         this.gateway.notifyUserToTranformationCompleted(job.data.userSocketId);
     }
 }

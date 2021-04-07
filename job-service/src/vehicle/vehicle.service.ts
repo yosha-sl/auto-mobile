@@ -15,7 +15,8 @@ export class VehicleService{
     // @Client({transport: Transport.TCP, options:{port: 3002}})
     // private dbService: ClientProxy;
     constructor(
-        @InjectQueue('vehicle_details_migration') private readonly audioQueue:Queue,
+        @InjectQueue('vehicle_details_migration') private readonly migrationQueue:Queue,
+        @InjectQueue('vehicle_details_download') private readonly genarateQueue:Queue,
         @InjectRepository(Vehicle)private vehicleRepository:Repository<Vehicle>
     ){}
 
@@ -30,6 +31,11 @@ export class VehicleService{
     }
 
     createVehicleCSVMigrationJob(file, skid){
-        this.audioQueue.add('migrate',{file:file, userSocketId: skid});
+        this.migrationQueue.add('migrate',{file:file, userSocketId: skid});
+    }
+
+    downloadVehicleDetailsCSVJob(dataList, skid){
+        console.log('add to queue');
+        this.genarateQueue.add('csv_download',{data:dataList, userSocketId: skid});
     }
 }

@@ -1,6 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import * as io from 'socket.io-client';
-import { HttpClientModule, HttpClient, HttpRequest, HttpResponse, HttpEventType } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Guid } from 'guid-typescript';
 import { ToastService } from './toast-service';
@@ -28,13 +27,18 @@ export class AppComponent implements OnInit {
     this.socket.on('msgToClient', (fileName: any) => {
       console.log('Something has been recived :)')
       // this.migrationResult.push('Done');
-      this.showSuccess();
+      this.showSuccess("Migration Completed");
+    });
+    this.socket.on('csvSource',(fileName: any) => {
+      console.log('Something has been recived :)')
+      // this.migrationResult.push('Done');
+      this.showDanger("CSV ready for download");
     });
   }
 
-  sendMessage() {
-    this.socket.emit('alert', sessionStorage.getItem('skid'));
-  }
+  // sendMessage() {
+  //   this.socket.emit('alert', sessionStorage.getItem('skid'));
+  // }
 
   initSocketConfiguration(){
     let skid:any = sessionStorage.getItem('skid');
@@ -44,6 +48,7 @@ export class AppComponent implements OnInit {
       skid = uuid;
     }
     this.socket.emit('joinToAlert', skid);
+    this.socket.emit('joinToCSVGen',skid);
   }
 
   close() {
@@ -56,12 +61,12 @@ export class AppComponent implements OnInit {
     this.toastService.show('I am a standard toast');
   }
 
-  showSuccess() {
-    this.toastService.show('I am a success toast', { classname: 'bg-success text-light', delay: 10000 });
+  showSuccess(msg) {
+    this.toastService.show(msg, { classname: 'bg-success text-light', delay: 10000 });
   }
 
-  showDanger(dangerTpl) {
-    this.toastService.show(dangerTpl, { classname: 'bg-danger text-light', delay: 15000 });
+  showDanger(msg) {
+    this.toastService.show(msg, { classname: 'bg-danger text-light', delay: 10000 });
   }
 
 }

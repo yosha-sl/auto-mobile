@@ -3,10 +3,17 @@ import { VehicleService } from './vehicle.service';
 import { Vehicle } from './entities/vehicle.entity';
 import { CreateVehicleInput } from './dto/create-vehicle.input';
 import { UpdateVehicleInput } from './dto/update-vehicle.input';
+import { AppService } from 'src/app.service';
 
 @Resolver(() => Vehicle)
 export class VehicleResolver {
-  constructor(private readonly vehicleService: VehicleService) {}
+
+  
+
+  constructor(
+    private readonly vehicleService: VehicleService,
+    private readonly appService:AppService
+    ) {}
 
   @Mutation(() => Vehicle)
   createVehicle(@Args('createVehicleInput') createVehicleInput: CreateVehicleInput) {
@@ -31,5 +38,14 @@ export class VehicleResolver {
   @Mutation(() => Vehicle)
   removeVehicle(@Args('id', { type: () => Int }) id: number) {
     return this.vehicleService.remove(id);
+  }
+
+  @Query(() => [Vehicle], { name: 'download' })
+  toDownload() {
+    console.log('Calling');
+    this.vehicleService.findAll().then( res => {
+      this.appService.getHello(res);
+    });
+    return [];
   }
 }
