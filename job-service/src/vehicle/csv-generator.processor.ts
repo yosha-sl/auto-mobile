@@ -18,14 +18,15 @@ export class VehicleDetailsDownloadProcessor {
     async migrateVehicleDetailsData(job: Job) {
         console.log('start to roll out requesrt')
         const json2csvParser = new Parser({ delimiter: ',' });
-        const tsv = json2csvParser.parse(job.data.file.path);
+        const tsv = json2csvParser.parse(job.data.data);
+
         job.data.result = tsv;
     }
 
     @OnQueueCompleted()
     onCompleted(job: Job, result: any) {
-        console.log(job);
-        console.log('***********************************************')
-        this.gateway.sendUserToCSV(job.data.userSocketId);
+        // console.log(job);
+        console.log('***********************************************');
+        this.gateway.sendUserToCSV(job.data.userSocketId, job.data.result);
     }
 }

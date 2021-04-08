@@ -47,12 +47,14 @@ export class VehicleListComponent implements OnInit {
   download(){
     return this.http.post(`${environment.baseURL}/files/download`, 
       {
-        vehicles: this.vehiclesData,
+        vehicles: 'nodata',
         skid: sessionStorage.getItem('skid')
       }
     ).subscribe(res => {
       console.log(res);
     });
   }
+
+  
 
 }

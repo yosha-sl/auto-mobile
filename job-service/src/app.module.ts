@@ -1,5 +1,5 @@
 import { BullModule } from '@nestjs/bull';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { ormConfig } from "./orm.comfig";
@@ -14,7 +14,7 @@ import { CSVDownloadController } from './csv-download.controller';
   }),
   VehicleModule,
   TypeOrmModule.forRoot(ormConfig),
-  
+
   ],
   controllers: [CSVDownloadController],
   providers: [],

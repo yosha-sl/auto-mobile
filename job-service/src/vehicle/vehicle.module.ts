@@ -1,5 +1,5 @@
 import { BullModule } from "@nestjs/bull";
-import { Module } from "@nestjs/common";
+import { CacheModule, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CsvModule } from "nest-csv-parser";
 import { from } from "rxjs";
@@ -23,7 +23,9 @@ import { VehicleService } from "./vehicle.service";
         TypeOrmModule.forFeature([Vehicle])
     ],
     controllers : [VehicleController],
-    providers :[VehicleDetailsMigrationProcessor,VehicleDetailsDownloadProcessor ,VehicleService, SocketGateway]
+    providers :[VehicleDetailsMigrationProcessor,
+        VehicleDetailsDownloadProcessor ,
+        VehicleService, SocketGateway]
 })
 export class VehicleModule{
 

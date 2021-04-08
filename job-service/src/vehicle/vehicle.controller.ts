@@ -7,7 +7,9 @@ import { Response } from 'express';
 @Controller("files")
 export class VehicleController{
 
-    constructor(private readonly vehicleService:VehicleService){}
+    constructor(
+        private readonly vehicleService:VehicleService
+        ){}
 
     @Post("csv")
     @UseInterceptors(FileInterceptor("csv", { dest: "./uploads",  }))
@@ -21,7 +23,26 @@ export class VehicleController{
     // @Header('Content-Disposition', 'attachment; filename=*custom_name*.csv')
     downloadCSV(@Res() res: Response, @Body() vehicleDetails: any) {
         console.log('Request');
-        this.vehicleService.downloadVehicleDetailsCSVJob(vehicleDetails.vehicles, vehicleDetails.skid);
+        //this.vehicleService.downloadVehicleDetailsCSVJob(vehicleDetails.vehicles, vehicleDetails.skid);
+        this.vehicleService.callToServer(undefined, vehicleDetails.skid);
         return "OK";
     }
+
+    @Post("readyDownload")
+    @Header('Content-Type', 'text/csv')
+    @Header('Content-Disposition', 'attachment; filename=*custom_name*.csv')
+    getGeneratedCSV(@Res() res: Response, @Body() vehicleDetails: any) {
+        console.log('getGeneratedCSV');
+        
+        return;
+    }
+
+    
+
+    // @Get('toServer')
+    // callToServer(){
+    //     console.log('Calling');
+    //     this.vehicleService.callToServer(undefined,);
+
+    // }
 }

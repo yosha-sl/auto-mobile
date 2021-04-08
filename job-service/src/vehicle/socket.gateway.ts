@@ -48,8 +48,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.server.to(uuid).emit('msgToClient');
     }
 
-    sendUserToCSV(uuid:string): void {
-        this.server.to(uuid).emit('csvSource');
+    sendUserToCSV(uuid:string, data): void {
+        this.server.to(uuid).emit('csvSource', data);
     }
 
 

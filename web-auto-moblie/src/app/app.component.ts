@@ -3,6 +3,7 @@ import * as io from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { Guid } from 'guid-typescript';
 import { ToastService } from './toast-service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,9 @@ export class AppComponent implements OnInit {
   migrationResult:[] = [];
   msgShow = false;
 
-  constructor(public toastService: ToastService) {
+  constructor(
+    public toastService: ToastService,
+    private http: HttpClient) {
     this.socket = io(environment.baseURL);
   }
   
@@ -30,9 +33,10 @@ export class AppComponent implements OnInit {
       this.showSuccess("Migration Completed");
     });
     this.socket.on('csvSource',(fileName: any) => {
-      console.log('Something has been recived :)')
+      console.log('csv ready for download')
       // this.migrationResult.push('Done');
       this.showDanger("CSV ready for download");
+      this.getReadyFileownload();
     });
   }
 
@@ -67,6 +71,17 @@ export class AppComponent implements OnInit {
 
   showDanger(msg) {
     this.toastService.show(msg, { classname: 'bg-danger text-light', delay: 10000 });
+  }
+
+  getReadyFileownload(){
+    return this.http.post(`${environment.baseURL}/files/readyDownload`, 
+      {
+        vehicles: 'nodata',
+        skid: sessionStorage.getItem('skid')
+      }
+    ).subscribe(res => {
+      console.log(res);
+    });
   }
 
 }
