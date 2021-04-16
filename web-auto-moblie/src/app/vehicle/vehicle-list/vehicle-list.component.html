@@ -1,27 +1,56 @@
 
 <div class="container-fluid p-5">
 
-    <button class="btn btn-success" (click)="download()">Download</button>
+ 
+
+  <div class="row">
+    <div class="col-md-6">
+      <button class="btn btn-success m-2" (click)="download()">Download</button>
+    </div>
+    <div class="col-md-6 text-right">
+      <button class="btn m-2"*ngIf="hasPreviousPage" (click)="fetchDataFromGateway(false, true)">
+        <i style="color: #2c49ee;font-size: 20px;" class="fas fa-angle-double-left"></i>
+      </button>
+  <button class="btn m-2" *ngIf="hasNextPage" (click)="fetchDataFromGateway(true, false)">
+    <i style="color: #2c49ee;font-size: 20px;" class="fas fa-angle-double-right"></i>
+  </button>
+     
+    </div>
+  </div>
+    
     
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">#</th>
+          <th scope="col">ID</th>
           <th scope="col">First Name</th>
           <th scope="col">Last Name</th>
+          <th scope="col">Manufactured Date</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let vehicle of vehiclesData; index as i">
-          <th scope="row">{{(i+1)}}</th>
+          <td >{{(vehicle.id)}}</td>
           <td>{{vehicle.firstName}}</td>
           <td>{{vehicle.lastName}}</td>
-          <td> <button class="btn btn-primary" (click)="onView(vehicle.id)">Edit</button></td>
+          <td>{{vehicle.manufacturedDate}}</td>
+          <td class="text-right"> <button class="btn  m-1" (click)="onView(vehicle.id)"><i style="color: #00cf68;" class="far fa-edit"></i></button>
+          <button class="btn m-1" (click)="onDelete(vehicle.id)"><i style="color: #e71f30;" class="far fa-trash-alt"></i></button></td>
         </tr>
         
       </tbody>
     </table>
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <button class="btn m-2"*ngIf="hasPreviousPage" (click)="fetchDataFromGateway(false, true)">
+          <i class="fas fa-angle-double-left"></i>
+        </button>
+    <button class="btn m-2" *ngIf="hasNextPage" (click)="fetchDataFromGateway(true, false)">
+      <i class="fas fa-angle-double-right"></i>
+    </button>
+      </div>
+    </div>
   </div>
 
   

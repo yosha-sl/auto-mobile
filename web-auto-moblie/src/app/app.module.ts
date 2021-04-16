@@ -30,7 +30,8 @@ import { ToastsContainer } from './toasts-container.component';
     NgbModule,
     NgbModule,
     GraphQLModule,
-    VehicleModule
+    VehicleModule,
+    
   ],
   providers: [ToastService],
   bootstrap: [AppComponent]

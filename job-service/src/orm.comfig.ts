@@ -6,7 +6,7 @@ export const ormConfig: TypeOrmModuleOptions = {
     password: 'root',
     port: 5432,
     host: '127.0.0.1',
-    database: 'auto_mobile',
+    database: 'automobile',
     synchronize: true,
     entities: ["dist/**/*.entity{.ts,.js}"]
 }

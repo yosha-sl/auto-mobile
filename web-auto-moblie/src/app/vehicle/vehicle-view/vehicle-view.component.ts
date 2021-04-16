@@ -1,18 +1,20 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { environment } from 'src/environments/environment';
 
 export class Vehicle {
 
-  id: number;
+  public id: number;
   public firstName: string;
   public lastName: string;
   public email: string;
   public carMake: string;
   public carModel: string;
   public vinNumber: string;
-  public manufactured_date: string;
+  public manufacturedDate: string;
 }
 
 @Component({
@@ -22,67 +24,132 @@ export class Vehicle {
 })
 export class VehicleViewComponent implements OnInit {
 
-  vehicle: Vehicle;
+  public vehicle: Vehicle;
+  public id = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private apollo: Apollo,
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.paramMap.get('id') ? this.route.snapshot.paramMap.get('id') : '';
     console.log(this.route.snapshot.paramMap.get('id'));
-    this.apollo
-      .query<any>({
-        query: gql`
-          {
-            vehicle(id: ${id}){
-              id,
-              firstName,
-              lastName,
-              email,
-              carMake,
-              carModel,
-              vinNumber,
-              manufactured_date,
-            }
-          }
-        `
-      })
-      .subscribe(
-        ({ data, loading }) => {
-          this.vehicle = data.vehicle;
-        }
-      );
+    if (this.id != '') { this.findVehicleById(this.id) } else { this.vehicle = new Vehicle };
+    // this.apollo
+    //   .query<any>({
+    //     query: gql`
+    //       {
+    //         vehicleById(id: ${id}){
+    //           id,
+    //           firstName,
+    //           lastName,
+    //           email,
+    //           carMake,
+    //           carModel,
+    //           vinNumber,
+    //           manufactured_date,
+    //         }
+    //       }
+    //     `
+    //   })
+    //   .subscribe(
+    //     ({ data, loading }) => {
+    //       this.vehicle = data.vehicle;
+    //     }
+    //   );
   }
 
   onSubmit() {
+    this.updateVehicleById();
 
-    const CREATE_LINK_MUTATION = gql`
-    
-      mutation{
-        updateVehicle(updateVehicleInput:{
-          id: ${this.vehicle.id},
-          firstName: ${this.vehicle.firstName},
-          lastName: ${this.vehicle.lastName},
-          email: ${this.vehicle.email},
-          carMake: ${this.vehicle.carMake},
-          carModel: ${this.vehicle.carModel},
-          vinNumber: ${this.vehicle.vinNumber},
-          manufactured_date: ${this.vehicle.manufactured_date},
-        }){id}
+  }
+
+  findVehicleById(id) {
+    let query = `
+    query{
+      vehicleById(id: ${id}){
+        id,
+        firstName,
+        lastName,
+        email,
+        carMake,
+        carModel,
+        vinNumber,
+        manufacturedDate
       }
-    `;
-
-    this.apollo.mutate({
-      mutation: CREATE_LINK_MUTATION,
-      
-    }).subscribe((response) => {
-        console.log(response);
+    }
+    `
+    return this.http.post(`${environment.gatewayURL}/graph`, { query }).subscribe((res: any) => {
+      this.vehicle = res.data.vehicleById;
     });
+  }
 
-
+  updateVehicleById() {
+    let query;
+    if (this.id != '') {
+      query = `
+    mutation {
+      updateVehicleById(
+        input: {id: ${this.vehicle.id}, 
+          vehiclePatch: {
+            firstName: "${this.vehicle.firstName}",
+            lastName : "${this.vehicle.lastName}",
+            email : "${this.vehicle.email}",
+            carMake : "${this.vehicle.carMake}",
+            carModel : "${this.vehicle.carModel}",
+            vinNumber : "${this.vehicle.vinNumber}",
+            manufacturedDate : "${this.vehicle.manufacturedDate}"
+      }}) {
+        vehicle {
+          id,
+          firstName,
+          lastName,
+          email,
+          carMake,
+          carModel,
+          vinNumber,
+          manufacturedDate
+        }
+      }
+    }
+    `
+    } else {
+      console.log(this.vehicle);
+      query = `
+    mutation {
+      createVehicle(
+        input: {vehicle: {
+          id: ${this.vehicle.id}
+            firstName: "${this.vehicle.firstName}",
+            lastName : "${this.vehicle.lastName}",
+            email : "${this.vehicle.email}",
+            carMake : "${this.vehicle.carMake}",
+            carModel : "${this.vehicle.carModel}",
+            vinNumber : "${this.vehicle.vinNumber}",
+            manufacturedDate : "${this.vehicle.manufacturedDate}"
+      }}) {
+        vehicle {
+          id,
+          firstName,
+          lastName,
+          email,
+          carMake,
+          carModel,
+          vinNumber,
+          manufacturedDate
+        }
+      }
+    }
+    `
+    }
+    console.log(this.vehicle);
+    return this.http.post(`${environment.gatewayURL}/graph`, { query }).subscribe((res: any) => {
+      // this.vehicle = res.data.updateVehicleById.vehicle;
+      this.router.navigate(['/view']);
+    });
   }
 
 }
