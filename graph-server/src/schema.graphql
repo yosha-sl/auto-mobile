@@ -1,7 +1,3 @@
-# ------------------------------------------------------
-# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
-# ------------------------------------------------------
-
 type Vehicle {
   id: Int!
   firstName: String
@@ -10,29 +6,29 @@ type Vehicle {
   carMake: String
   carModel: String
   vinNumber: String
-  manufactured_date: String
+  manufacturedDate: String
 }
-
+  
 type Query {
-  vehicles: [Vehicle!]!
-  vehicle(id: Int!): Vehicle!
-  download: [Vehicle!]!
+  allVehicles: [Vehicle!]!
+  vehicleById(id: Int!): Vehicle!
 }
 
 type Mutation {
   createVehicle(createVehicleInput: CreateVehicleInput!): Vehicle!
-  updateVehicle(updateVehicleInput: UpdateVehicleInput!): Vehicle!
-  removeVehicle(id: Int!): Vehicle!
+  updateVehicleById(updateVehicleInput: UpdateVehicleInput!): Vehicle!
+  deleteVehicleById(id: Int!): Vehicle!
 }
 
 input CreateVehicleInput {
+  id: Int!
   firstName: String
   lastName: String
   email: String
   carMake: String
   carModel: String
   vinNumber: String
-  manufactured_date: String
+  manufacturedDate: String
 }
 
 input UpdateVehicleInput {
@@ -42,6 +38,6 @@ input UpdateVehicleInput {
   carMake: String
   carModel: String
   vinNumber: String
-  manufactured_date: String
+  manufacturedDate: String
   id: Int!
 }

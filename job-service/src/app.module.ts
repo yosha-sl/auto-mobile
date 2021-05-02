@@ -3,7 +3,7 @@ import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { ormConfig } from "./orm.comfig";
-import { CSVDownloadController } from './csv-download.controller';
+import { CSVDownloadController } from './socket.controller';
 
 @Module({
   imports: [BullModule.forRoot({
