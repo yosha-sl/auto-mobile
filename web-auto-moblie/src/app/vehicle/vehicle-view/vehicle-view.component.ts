@@ -82,7 +82,7 @@ export class VehicleViewComponent implements OnInit {
       }
     }
     `
-    return this.http.post(`${environment.gatewayURL}/graph`, { query }).subscribe((res: any) => {
+    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
       this.vehicle = res.data.vehicleById;
     });
   }
@@ -93,8 +93,8 @@ export class VehicleViewComponent implements OnInit {
       query = `
     mutation {
       updateVehicleById(
-        input: {id: ${this.vehicle.id}, 
-          vehiclePatch: {
+        updateVehicleInput: {
+            id: ${this.vehicle.id}
             firstName: "${this.vehicle.firstName}",
             lastName : "${this.vehicle.lastName}",
             email : "${this.vehicle.email}",
@@ -102,8 +102,7 @@ export class VehicleViewComponent implements OnInit {
             carModel : "${this.vehicle.carModel}",
             vinNumber : "${this.vehicle.vinNumber}",
             manufacturedDate : "${this.vehicle.manufacturedDate}"
-      }}) {
-        vehicle {
+      }) {
           id,
           firstName,
           lastName,
@@ -112,7 +111,6 @@ export class VehicleViewComponent implements OnInit {
           carModel,
           vinNumber,
           manufacturedDate
-        }
       }
     }
     `
@@ -121,17 +119,17 @@ export class VehicleViewComponent implements OnInit {
       query = `
     mutation {
       createVehicle(
-        input: {vehicle: {
-          id: ${this.vehicle.id}
-            firstName: "${this.vehicle.firstName}",
-            lastName : "${this.vehicle.lastName}",
-            email : "${this.vehicle.email}",
-            carMake : "${this.vehicle.carMake}",
-            carModel : "${this.vehicle.carModel}",
-            vinNumber : "${this.vehicle.vinNumber}",
-            manufacturedDate : "${this.vehicle.manufacturedDate}"
-      }}) {
-        vehicle {
+        createVehicleInput: {
+          id: ${this.vehicle.id},
+          firstName: "${this.vehicle.firstName}",
+          lastName : "${this.vehicle.lastName}",
+          email : "${this.vehicle.email}",
+          carMake : "${this.vehicle.carMake}",
+          carModel : "${this.vehicle.carModel}",
+          vinNumber : "${this.vehicle.vinNumber}",
+          manufacturedDate : "${this.vehicle.manufacturedDate}"
+      }) {
+       
           id,
           firstName,
           lastName,
@@ -140,13 +138,13 @@ export class VehicleViewComponent implements OnInit {
           carModel,
           vinNumber,
           manufacturedDate
-        }
+        
       }
     }
     `
     }
     console.log(this.vehicle);
-    return this.http.post(`${environment.gatewayURL}/graph`, { query }).subscribe((res: any) => {
+    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
       // this.vehicle = res.data.updateVehicleById.vehicle;
       this.router.navigate(['/view']);
     });

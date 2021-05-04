@@ -53,7 +53,7 @@ export class VehicleListComponent implements OnInit {
 
   fetchDataFromGateway(isNext: boolean, isPrevious: boolean) {
     let query = null;
-    if (this.hasNextPage && isNext && this.endCursor) {
+    if (/*this.hasNextPage && isNext && this.endCursor*/false) {
       query = `
         query{
           allVehicles(first:100, after:"${this.endCursor}",orderBy:MANUFACTURED_DATE_ASC){
@@ -72,7 +72,7 @@ export class VehicleListComponent implements OnInit {
           }
         }
       `
-    } else if (this.hasPreviousPage && isPrevious && this.startCursor) {
+    } else if (false /*this.hasPreviousPage && isPrevious && this.startCursor*/) {
       query = `
         query{
           allVehicles(last:100,before:"${this.startCursor}",orderBy:MANUFACTURED_DATE_ASC){
@@ -92,33 +92,43 @@ export class VehicleListComponent implements OnInit {
         }
       `
     } else {
+      // query = `
+      //   query{
+      //     allVehicles(first:100,orderBy:MANUFACTURED_DATE_ASC){
+      //       nodes{
+      //         id,
+      //         firstName,
+      //         lastName,
+      //         manufacturedDate
+      //       },
+      //       pageInfo {
+      //         startCursor
+      //         endCursor
+      //         hasNextPage
+      //         hasPreviousPage
+      //       }
+      //     }
+      //   }
+      // `
       query = `
         query{
-          allVehicles(first:100,orderBy:MANUFACTURED_DATE_ASC){
-            nodes{
+          allVehicles{
               id,
               firstName,
               lastName,
               manufacturedDate
-            },
-            pageInfo {
-              startCursor
-              endCursor
-              hasNextPage
-              hasPreviousPage
-            }
           }
         }
       `
     }
     // const headers = { 'Content-Type': 'application/graphql'};
-    return this.http.post(`${environment.gatewayURL}/graph`, { query }).subscribe((res: any) => {
+    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
       console.log(res);
-      this.vehiclesData = res.data.allVehicles.nodes;
-      this.hasNextPage = res.data.allVehicles.pageInfo.hasNextPage;
-      this.hasPreviousPage = res.data.allVehicles.pageInfo.hasPreviousPage;
-      this.endCursor = res.data.allVehicles.pageInfo.endCursor;
-      this.startCursor = res.data.allVehicles.pageInfo.startCursor;
+      this.vehiclesData = res.data.allVehicles;
+      // this.hasNextPage = res.data.allVehicles.pageInfo.hasNextPage;
+      // this.hasPreviousPage = res.data.allVehicles.pageInfo.hasPreviousPage;
+      // this.endCursor = res.data.allVehicles.pageInfo.endCursor;
+      // this.startCursor = res.data.allVehicles.pageInfo.startCursor;
     });
   }
 
@@ -138,38 +148,22 @@ export class VehicleListComponent implements OnInit {
     });
   }
 
-  onDelete(id){
+  onDelete(id) {
     let query = `
-    mutation {
-      deleteVehicleById(
-        input: {id: ${id}}
-        ) {
-    query{
-      allVehicles(first:100,orderBy:MANUFACTURED_DATE_ASC){
-        nodes{
-                id,
-                firstName,
-                lastName,
-                manufacturedDate
-              },
-              pageInfo {
-                startCursor
-                endCursor
-                hasNextPage
-                hasPreviousPage
-              }
-      }
-    }
+    mutation{
+      deleteVehicleById(id:${id}){
+         firstName 
       }
     }
     `
-    return this.http.post(`${environment.gatewayURL}/graph`, { query }).subscribe((res: any) => {
+    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
       console.log(res);
-      this.vehiclesData = res.data.deleteVehicleById.query.allVehicles.nodes;
-      this.hasNextPage = res.data.deleteVehicleById.query.allVehicles.pageInfo.hasNextPage;
-      this.hasPreviousPage = res.data.deleteVehicleById.query.allVehicles.pageInfo.hasPreviousPage;
-      this.endCursor = res.data.deleteVehicleById.query.allVehicles.pageInfo.endCursor;
-      this.startCursor = res.data.deleteVehicleById.query.allVehicles.pageInfo.startCursor;
+      this.fetchDataFromGateway(false,false);
+      // this.vehiclesData = res.data.deleteVehicleById.query.allVehicles.nodes;
+      // this.hasNextPage = res.data.deleteVehicleById.query.allVehicles.pageInfo.hasNextPage;
+      // this.hasPreviousPage = res.data.deleteVehicleById.query.allVehicles.pageInfo.hasPreviousPage;
+      // this.endCursor = res.data.deleteVehicleById.query.allVehicles.pageInfo.endCursor;
+      // this.startCursor = res.data.deleteVehicleById.query.allVehicles.pageInfo.startCursor;
     });
   }
 
