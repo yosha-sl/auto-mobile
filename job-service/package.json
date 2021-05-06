@@ -42,6 +42,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
+    "socketcluster-client": "^16.0.2",
     "typeorm": "^0.2.32"
   },
   "devDependencies": {

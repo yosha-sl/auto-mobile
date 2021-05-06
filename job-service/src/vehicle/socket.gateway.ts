@@ -1,12 +1,26 @@
 import { Logger } from '@nestjs/common';
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+const socketClusterClient = require('socketcluster-client');
 
 @WebSocketGateway()
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
+    socket;
+
     @WebSocketServer() server: Server;
     private logger: Logger = new Logger('AppGateway');
+
+    constructor() {
+        this.initSocketCluster();
+    }
+
+    async initSocketCluster() {
+        this.socket = await socketClusterClient.create({
+            hostname: 'localhost',
+            port: 8000
+        });
+    }
 
 
     @SubscribeMessage('msgToServer')
@@ -21,7 +35,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     handleConnection(client: Socket, ...args: any[]) {
-        
+
         this.logger.log(`Client connected: ${client.id}`);
     }
 
@@ -44,11 +58,12 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     //     this.server.to(uuid).emit('msgToClient');
     // }
 
-    notifyUserToTranformationCompleted(uuid:string): void {
-        this.server.to(uuid).emit('msgToClient');
+    notifyUserToTranformationCompleted(uuid: string): void {
+        //this.server.to(uuid).emit('msgToClient');
+        this.socket.transmitPublish(uuid, 'Transformation Completed');
     }
 
-    sendUserToCSV(uuid:string, data): void {
+    sendUserToCSV(uuid: string, data): void {
         this.server.to(uuid).emit('csvSource', data);
     }
 

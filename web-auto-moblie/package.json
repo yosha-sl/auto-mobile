@@ -20,17 +20,18 @@
     "@angular/platform-browser": "~11.2.8",
     "@angular/platform-browser-dynamic": "~11.2.8",
     "@angular/router": "~11.2.8",
+    "@apollo/client": "^3.0.0",
     "@ng-bootstrap/ng-bootstrap": "^9.1.0",
     "@types/socket.io-client": "^1.4.34",
     "apollo-angular": "^2.4.0",
     "bootstrap": "^4.6.0",
+    "graphql": "^15.0.0",
     "guid-typescript": "^1.0.9",
     "rxjs": "~6.6.0",
     "socket.io-client": "^2.3.1",
+    "socketcluster-client": "^16.0.2",
     "tslib": "^2.0.0",
-    "zone.js": "~0.11.3",
-    "@apollo/client": "^3.0.0",
-    "graphql": "^15.0.0"
+    "zone.js": "~0.11.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.7",

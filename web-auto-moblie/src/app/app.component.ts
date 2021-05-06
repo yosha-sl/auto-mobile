@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Guid } from 'guid-typescript';
 import { ToastService } from './toast-service';
 import { HttpClient } from '@angular/common/http';
+import * as socketClusterClient from 'socketcluster-client';
 
 @Component({
   selector: 'app-root',
@@ -26,18 +27,37 @@ export class AppComponent implements OnInit {
   
 
   ngOnInit(): void {
-    this.initSocketConfiguration();
-    this.socket.on('msgToClient', (fileName: any) => {
-      console.log('Something has been recived :)')
-      // this.migrationResult.push('Done');
-      this.showSuccess("Migration Completed");
+    // this.initSocketConfiguration();
+    // this.socket.on('msgToClient', (fileName: any) => {
+    //   console.log('Something has been recived :)')
+    //   // this.migrationResult.push('Done');
+    //   this.showSuccess("Migration Completed");
+    // });
+    // this.socket.on('csvSource',(fileName: any) => {
+    //   console.log('csv ready for download')
+    //   // this.migrationResult.push('Done');
+    //   this.showDanger("CSV ready for download");
+    //   this.getReadyFileownload();
+    // });
+      this.initSocketCluster();
+  }
+
+  async initSocketCluster() {
+    let skid:any = sessionStorage.getItem('skid');
+    if(!skid){
+      const uuid = Guid.create().toString();
+      sessionStorage.setItem('skid', uuid);
+      skid = uuid;
+    }
+    let socket = await socketClusterClient.create({
+      hostname: 'localhost',
+      port: 8000
     });
-    this.socket.on('csvSource',(fileName: any) => {
-      console.log('csv ready for download')
-      // this.migrationResult.push('Done');
-      this.showDanger("CSV ready for download");
-      this.getReadyFileownload();
-    });
+    console.log("Done ....");
+    let channel = socket.subscribe(skid);
+    for await (let data of channel) {
+      this.showSuccess("CSV Migration Completed");
+    }
   }
 
   // sendMessage() {

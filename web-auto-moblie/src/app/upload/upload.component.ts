@@ -18,7 +18,7 @@ export class UploadComponent implements OnInit {
   handleFileInput(event:any) {
     let file:File = event?.target?.files[0];
     if(file)this.uploadService.uploadCSVFile(file).subscribe( res => {
-      this.toastService.show('CSV Uploading completed');
+      //this.toastService.show('CSV Uploading completed');
       event.target.value = '';
     });
   }
