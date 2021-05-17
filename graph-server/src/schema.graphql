@@ -10,7 +10,8 @@ type Vehicle {
 }
   
 type Query {
-  allVehicles: [Vehicle!]!
+  allVehicles(filter:VehicleFilter): [Vehicle!]!
+  allVehiclesByLimitAndOrder(first:Int, last:Int, after:String, before:String, orderBy:VehicleOrderBy):Node
   vehicleById(id: Int!): Vehicle!
 }
 
@@ -40,4 +41,28 @@ input UpdateVehicleInput {
   vinNumber: String
   manufacturedDate: String
   id: Int!
+}
+
+type Node{
+  nodes: [Vehicle]
+  pageInfo: PageInfo
+}
+
+type PageInfo{
+  startCursor:String
+  endCursor:String
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+}
+
+enum VehicleOrderBy {
+    MANUFACTURED_DATE_ASC
+}
+
+input VehicleFilter{
+  carMake: StringFilter
+}
+
+input StringFilter{
+  includesInsensitive: String
 }

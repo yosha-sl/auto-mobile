@@ -11,8 +11,7 @@ import { UploadModule } from './upload/upload.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GraphQLModule } from './graphql.module';
 import { VehicleModule } from './vehicle/vehicle.module';
-import { ToastService } from './toast-service';
-import { ToastsContainer } from './toasts-container.component';
+import { ToastsContainer } from './shared/component/toast/toasts-container.component';
 
 @NgModule({
   declarations: [
@@ -30,10 +29,9 @@ import { ToastsContainer } from './toasts-container.component';
     NgbModule,
     NgbModule,
     GraphQLModule,
-    VehicleModule,
-    
+    VehicleModule
   ],
-  providers: [ToastService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -9,8 +9,22 @@ export class VehicleResolver {
     constructor(private vehicleService: VehicleService) { }
 
     @Query()
-    async allVehicles() {
-        return this.vehicleService.findAll();
+    async allVehicles(
+        @Args('filter') filter: any,
+    ) {
+        return this.vehicleService.findAll(filter);
+    }
+
+    @Query()
+    async allVehiclesByLimitAndOrder(
+        @Args('first') first: number,
+        @Args('last') last: number,
+        @Args('after') after: string,
+        @Args('before') before: string,
+        @Args('orderBy') orderBy: any
+    ) {
+        console.log(first,last,after,before,orderBy);
+        return this.vehicleService.findAllByLimitAndOrder(first,last,after,before,orderBy);
     }
 
     @Query()

@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { VehicleService } from '../vehicle.service';
 
 @Component({
   selector: 'app-vehicle-search',
@@ -12,7 +11,8 @@ export class VehicleSearchComponent implements OnInit {
   result;
 
   constructor(
-    private http: HttpClient) { }
+    private vehicleService: VehicleService
+  ) {}
 
   ngOnInit(): void {
   }
@@ -20,24 +20,8 @@ export class VehicleSearchComponent implements OnInit {
   onSearch(val) {
     console.log(val);
     this.result = []
-    let query = `
-    query{
-      allVehicles(filter: {
-        carMake: {
-          includesInsensitive: "${val}"
-        }
-      }){
-        nodes{
-          carModel,
-          carMake,
-          vinNumber
-        }
-      }
-    }
-      `
-    return this.http.post(`${environment.gatewayURL}/graph`, { query }).subscribe((res: any) => {
-      console.log(res);
-      this.result = res.data.allVehicles.nodes;
+    this.vehicleService.filter({ carMake: val }).subscribe((res: any) => {
+      this.result = res.data.allVehicles;
     });
   }
 

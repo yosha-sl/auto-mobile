@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VehicleComponent } from './vehicle.component';
 import {VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { VehicleViewComponent } from './vehicle-view/vehicle-view.component';
 import { FormsModule } from '@angular/forms';
 import { VehicleSearchComponent } from './vehicle-search/vehicle-search.component';
+import { VehicleService } from './vehicle.service';
 
 
 
 @NgModule({
   declarations: [
-    VehicleComponent,
     VehicleListComponent,
     VehicleViewComponent,
     VehicleSearchComponent
@@ -19,6 +18,7 @@ import { VehicleSearchComponent } from './vehicle-search/vehicle-search.componen
     FormsModule,
     CommonModule
   ],
+  providers:[VehicleService],
   exports: []
 })
 export class VehicleModule { }

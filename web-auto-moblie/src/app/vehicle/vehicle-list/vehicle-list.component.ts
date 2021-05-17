@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { VehicleService } from '../vehicle.service';
 
 
 @Component({
@@ -15,18 +12,14 @@ import { environment } from 'src/environments/environment';
 export class VehicleListComponent implements OnInit {
   vehiclesData: any[];
 
-
-
-
   hasNextPage = false;
   hasPreviousPage = false;
   endCursor = null;
   startCursor = null;
 
   constructor(
-    private apollo: Apollo,
     private router: Router,
-    private http: HttpClient
+    private vehicleService: VehicleService
   ) { }
 
   ngOnInit(): void {
@@ -52,121 +45,35 @@ export class VehicleListComponent implements OnInit {
   }
 
   fetchDataFromGateway(isNext: boolean, isPrevious: boolean) {
-    let query = null;
-    if (/*this.hasNextPage && isNext && this.endCursor*/false) {
-      query = `
-        query{
-          allVehicles(first:100, after:"${this.endCursor}",orderBy:MANUFACTURED_DATE_ASC){
-            nodes{
-              id,
-              firstName,
-              lastName,
-              manufacturedDate
-            },
-            pageInfo {
-              startCursor
-              endCursor
-              hasNextPage
-              hasPreviousPage
-            }
-          }
-        }
-      `
-    } else if (false /*this.hasPreviousPage && isPrevious && this.startCursor*/) {
-      query = `
-        query{
-          allVehicles(last:100,before:"${this.startCursor}",orderBy:MANUFACTURED_DATE_ASC){
-            nodes{
-              id,
-              firstName,
-              lastName,
-              manufacturedDate
-            },
-            pageInfo {
-              startCursor
-              endCursor
-              hasNextPage
-              hasPreviousPage
-            }
-          }
-        }
-      `
-    } else {
-      // query = `
-      //   query{
-      //     allVehicles(first:100,orderBy:MANUFACTURED_DATE_ASC){
-      //       nodes{
-      //         id,
-      //         firstName,
-      //         lastName,
-      //         manufacturedDate
-      //       },
-      //       pageInfo {
-      //         startCursor
-      //         endCursor
-      //         hasNextPage
-      //         hasPreviousPage
-      //       }
-      //     }
-      //   }
-      // `
-      query = `
-        query{
-          allVehicles{
-              id,
-              firstName,
-              lastName,
-              manufacturedDate
-          }
-        }
-      `
-    }
-    // const headers = { 'Content-Type': 'application/graphql'};
-    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
-      console.log(res);
-      this.vehiclesData = res.data.allVehicles;
-      // this.hasNextPage = res.data.allVehicles.pageInfo.hasNextPage;
-      // this.hasPreviousPage = res.data.allVehicles.pageInfo.hasPreviousPage;
-      // this.endCursor = res.data.allVehicles.pageInfo.endCursor;
-      // this.startCursor = res.data.allVehicles.pageInfo.startCursor;
+    return this.vehicleService.findAll(
+      {
+        isNext: isNext,
+        isPrevious: isNext,
+        hasNextPage: this.hasNextPage,
+        endCursor: this.endCursor,
+        hasPreviousPage: this.hasPreviousPage,
+        startCursor: this.startCursor
+      }
+    ).subscribe((res: any) => {
+      this.vehiclesData = res.data.allVehiclesByLimitAndOrder.nodes;
+      this.hasNextPage = res.data.allVehiclesByLimitAndOrder.pageInfo.hasNextPage;
+      this.hasPreviousPage = res.data.allVehiclesByLimitAndOrder.pageInfo.hasPreviousPage;
+      this.endCursor = res.data.allVehiclesByLimitAndOrder.pageInfo.endCursor;
+      this.startCursor = res.data.allVehiclesByLimitAndOrder.pageInfo.startCursor;
     });
   }
-
 
   onView(id) {
     this.router.navigate(['/view', id]);
   }
 
-  download() {
-    return this.http.post(`${environment.baseURL}/files/download`,
-      {
-        vehicles: 'nodata',
-        skid: sessionStorage.getItem('skid')
-      }
-    ).subscribe(res => {
-      console.log(res);
-    });
-  }
-
   onDelete(id) {
-    let query = `
-    mutation{
-      deleteVehicleById(id:${id}){
-         firstName 
-      }
-    }
-    `
-    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
-      console.log(res);
-      this.fetchDataFromGateway(false,false);
-      // this.vehiclesData = res.data.deleteVehicleById.query.allVehicles.nodes;
-      // this.hasNextPage = res.data.deleteVehicleById.query.allVehicles.pageInfo.hasNextPage;
-      // this.hasPreviousPage = res.data.deleteVehicleById.query.allVehicles.pageInfo.hasPreviousPage;
-      // this.endCursor = res.data.deleteVehicleById.query.allVehicles.pageInfo.endCursor;
-      // this.startCursor = res.data.deleteVehicleById.query.allVehicles.pageInfo.startCursor;
+    return this.vehicleService.delete(id).subscribe((res: any) => {
+      this.fetchDataFromGateway(false, false);
     });
   }
 
-
-
+  download(){
+    this.vehicleService.download();
+  }
 }

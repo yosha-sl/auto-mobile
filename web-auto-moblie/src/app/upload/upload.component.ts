@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastService } from '../toast-service';
+import { ToastService } from '../shared/component/toast/toast-service';
 import { UploadService } from './upload.service';
 
 @Component({

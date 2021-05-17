@@ -1,12 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { environment } from 'src/environments/environment';
+import { VehicleService } from '../vehicle.service';
 
 export class Vehicle {
-
   public id: number;
   public firstName: string;
   public lastName: string;
@@ -30,8 +27,7 @@ export class VehicleViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private apollo: Apollo,
-    private http: HttpClient
+    private vehicleService: VehicleService
   ) { }
 
   ngOnInit(): void {
@@ -64,90 +60,25 @@ export class VehicleViewComponent implements OnInit {
 
   onSubmit() {
     this.updateVehicleById();
-
   }
 
   findVehicleById(id) {
-    let query = `
-    query{
-      vehicleById(id: ${id}){
-        id,
-        firstName,
-        lastName,
-        email,
-        carMake,
-        carModel,
-        vinNumber,
-        manufacturedDate
-      }
-    }
-    `
-    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
+    this.vehicleService.findById(id).subscribe((res: any) => {
       this.vehicle = res.data.vehicleById;
     });
   }
 
   updateVehicleById() {
-    let query;
     if (this.id != '') {
-      query = `
-    mutation {
-      updateVehicleById(
-        updateVehicleInput: {
-            id: ${this.vehicle.id}
-            firstName: "${this.vehicle.firstName}",
-            lastName : "${this.vehicle.lastName}",
-            email : "${this.vehicle.email}",
-            carMake : "${this.vehicle.carMake}",
-            carModel : "${this.vehicle.carModel}",
-            vinNumber : "${this.vehicle.vinNumber}",
-            manufacturedDate : "${this.vehicle.manufacturedDate}"
-      }) {
-          id,
-          firstName,
-          lastName,
-          email,
-          carMake,
-          carModel,
-          vinNumber,
-          manufacturedDate
-      }
-    }
-    `
+      this.vehicleService.update(this.vehicle).subscribe((res: any) => {
+        this.router.navigate(['/view']);
+      });
     } else {
       console.log(this.vehicle);
-      query = `
-    mutation {
-      createVehicle(
-        createVehicleInput: {
-          id: ${this.vehicle.id},
-          firstName: "${this.vehicle.firstName}",
-          lastName : "${this.vehicle.lastName}",
-          email : "${this.vehicle.email}",
-          carMake : "${this.vehicle.carMake}",
-          carModel : "${this.vehicle.carModel}",
-          vinNumber : "${this.vehicle.vinNumber}",
-          manufacturedDate : "${this.vehicle.manufacturedDate}"
-      }) {
-       
-          id,
-          firstName,
-          lastName,
-          email,
-          carMake,
-          carModel,
-          vinNumber,
-          manufacturedDate
-        
-      }
+      this.vehicleService.create(this.vehicle).subscribe((res: any) => {
+        this.router.navigate(['/view']);
+      });
     }
-    `
-    }
-    console.log(this.vehicle);
-    return this.http.post(`${environment.gatewayURL}/graphql`, { query }).subscribe((res: any) => {
-      // this.vehicle = res.data.updateVehicleById.vehicle;
-      this.router.navigate(['/view']);
-    });
   }
 
 }

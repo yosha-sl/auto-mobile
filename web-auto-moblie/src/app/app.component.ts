@@ -1,45 +1,27 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import * as io from 'socket.io-client';
-import { environment } from 'src/environments/environment';
 import { Guid } from 'guid-typescript';
-import { ToastService } from './toast-service';
-import { HttpClient } from '@angular/common/http';
 import * as socketClusterClient from 'socketcluster-client';
+import { environment } from 'src/environments/environment';
+import { ToastService } from './shared/component/toast/toast-service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
   host: {'window:beforeunload':'doSomething'}
 })
 export class AppComponent implements OnInit {
   title = 'web-auto-moblie';
 
-  private socket: any;
   migrationResult:[] = [];
   msgShow = false;
 
   constructor(
-    public toastService: ToastService,
-    private http: HttpClient) {
-    this.socket = io(environment.baseURL);
+    public toastService: ToastService) {
   }
   
 
   ngOnInit(): void {
-    // this.initSocketConfiguration();
-    // this.socket.on('msgToClient', (fileName: any) => {
-    //   console.log('Something has been recived :)')
-    //   // this.migrationResult.push('Done');
-    //   this.showSuccess("Migration Completed");
-    // });
-    // this.socket.on('csvSource',(fileName: any) => {
-    //   console.log('csv ready for download')
-    //   // this.migrationResult.push('Done');
-    //   this.showDanger("CSV ready for download");
-    //   this.getReadyFileownload();
-    // });
-      this.initSocketCluster();
+    this.initSocketCluster();
   }
 
   async initSocketCluster() {
@@ -49,40 +31,20 @@ export class AppComponent implements OnInit {
       sessionStorage.setItem('skid', uuid);
       skid = uuid;
     }
+    
     let socket = await socketClusterClient.create({
-      hostname: 'localhost',
-      port: 8000
+      hostname: environment.hostName,
+      port: environment.port
     });
-    console.log("Done ....");
+
     let channel = socket.subscribe(skid);
     for await (let data of channel) {
       this.showSuccess("CSV Migration Completed");
     }
   }
 
-  // sendMessage() {
-  //   this.socket.emit('alert', sessionStorage.getItem('skid'));
-  // }
-
-  initSocketConfiguration(){
-    let skid:any = sessionStorage.getItem('skid');
-    if(!skid){
-      const uuid = Guid.create().toString();
-      sessionStorage.setItem('skid', uuid);
-      skid = uuid;
-    }
-    this.socket.emit('joinToAlert', skid);
-    this.socket.emit('joinToCSVGen',skid);
-  }
-
   close() {
     this.msgShow = false;
-  }
-
-
-
-  showStandard() {
-    this.toastService.show('I am a standard toast');
   }
 
   showSuccess(msg) {
@@ -93,15 +55,15 @@ export class AppComponent implements OnInit {
     this.toastService.show(msg, { classname: 'bg-danger text-light', delay: 10000 });
   }
 
-  getReadyFileownload(){
-    return this.http.post(`${environment.baseURL}/files/readyDownload`, 
-      {
-        vehicles: 'nodata',
-        skid: sessionStorage.getItem('skid')
-      }
-    ).subscribe(res => {
-      console.log(res);
-    });
-  }
+  // getReadyFileownload(){
+  //   return this.http.post(`${environment.baseURL}/files/readyDownload`, 
+  //     {
+  //       vehicles: 'nodata',
+  //       skid: sessionStorage.getItem('skid')
+  //     }
+  //   ).subscribe(res => {
+  //     console.log(res);
+  //   });
+  // }
 
 }

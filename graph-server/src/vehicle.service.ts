@@ -7,10 +7,10 @@ const URL = 'http://localhost:5000/graphql';
 @Injectable()
 export class VehicleService {
 
-  async findAll() {
+  async findAll(filter:any) {
     const query = `
         {query{
-            allVehicles{
+            allVehicles ${filter?('(filter:{ carMake: { includesInsensitive: "'+filter.carMake.includesInsensitive+'" } })'):''}{
                 nodes{
                     id
                     firstName
@@ -26,6 +26,40 @@ export class VehicleService {
         `;
     let result = await this.fetchData(query);
     return result.data.query.allVehicles.nodes;
+  }
+
+  async findAllByLimitAndOrder(first, last, after, before,orderBy) {
+    const query = `
+        {query{
+            allVehicles(
+              ${first?('first:'+first+','):''}
+              ${last?('last:'+last+','):''}
+              ${after?('after:"'+after+'",'):''}
+              ${before?('before:"'+before+'",'):''}
+              orderBy:${orderBy}
+              ){
+                nodes{
+                    id
+                    firstName
+                    lastName
+                    email
+                    carMake
+                    carModel
+                    vinNumber
+                    manufacturedDate
+                },
+                pageInfo {
+                  startCursor
+                  endCursor
+                  hasNextPage
+                  hasPreviousPage
+                }
+              }
+          }}
+        `;
+        console.log(query);
+    let result = await this.fetchData(query);
+    return result.data.query.allVehicles;
   }
 
   async findOne(id) {
