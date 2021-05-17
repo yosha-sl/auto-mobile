@@ -4,7 +4,7 @@ Microservices test with NestJS
 
 # v1.1
 
-![Diagram v1 1](https://user-images.githubusercontent.com/81754478/117243225-6fbbda00-ae54-11eb-8895-a0b4f8d1f11a.jpg)
+![diagram v1 1](https://user-images.githubusercontent.com/81754478/118448564-c4423d80-b70f-11eb-94d1-40be42115197.jpg)
 
 
 # v1 .0
