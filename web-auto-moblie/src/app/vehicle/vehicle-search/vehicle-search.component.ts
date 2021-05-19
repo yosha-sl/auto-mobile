@@ -19,10 +19,10 @@ export class VehicleSearchComponent implements OnInit {
 
   onSearch(val) {
     console.log(val);
-    this.result = []
-    this.vehicleService.filter({ carMake: val }).subscribe((res: any) => {
-      this.result = res.data.allVehicles;
-    });
+    // this.result = []
+    // this.vehicleService.filter({ carMake: val }).subscribe((res: any) => {
+    //   this.result = res.data.allVehicles;
+    // });
   }
 
 }

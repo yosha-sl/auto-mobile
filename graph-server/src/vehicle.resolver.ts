@@ -11,8 +11,13 @@ export class VehicleResolver {
     @Query()
     async allVehicles(
         @Args('filter') filter: any,
+        @Args('first') first: number,
+        @Args('last') last: number,
+        @Args('after') after: string,
+        @Args('before') before: string,
+        @Args('orderBy') orderBy: any
     ) {
-        return this.vehicleService.findAll(filter);
+        return this.vehicleService.findAll(filter,first,last,after,before,orderBy);
     }
 
     @Query()
@@ -23,7 +28,7 @@ export class VehicleResolver {
         @Args('before') before: string,
         @Args('orderBy') orderBy: any
     ) {
-        console.log(first,last,after,before,orderBy);
+    
         return this.vehicleService.findAllByLimitAndOrder(first,last,after,before,orderBy);
     }
 
@@ -46,6 +51,4 @@ export class VehicleResolver {
     deleteVehicleById(@Args('id', { type: () => Int }) id: number) {
         return this.vehicleService.removeById(id);
     }
-
-
 }

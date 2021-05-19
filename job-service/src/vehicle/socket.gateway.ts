@@ -22,18 +22,28 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
     }
 
+    notifyUserToTranformationCompleted(uuid: string): void {
+        this.socket.transmitPublish(uuid, 'Transformation Completed');
+    }
+
+
+    
+
 
     @SubscribeMessage('msgToServer')
     handleMessage(client: Socket, payload: string): void {
         console.log('Getting message', payload);
         this.server.emit('msgToClient', payload);
     }
+
     afterInit(server: Server) {
         this.logger.log('Init');
     }
+
     handleDisconnect(client: Socket) {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
+
     handleConnection(client: Socket, ...args: any[]) {
 
         this.logger.log(`Client connected: ${client.id}`);
@@ -58,10 +68,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     //     this.server.to(uuid).emit('msgToClient');
     // }
 
-    notifyUserToTranformationCompleted(uuid: string): void {
-        //this.server.to(uuid).emit('msgToClient');
-        this.socket.transmitPublish(uuid, 'Transformation Completed');
-    }
+    
 
     sendUserToCSV(uuid: string, data): void {
         this.server.to(uuid).emit('csvSource', data);

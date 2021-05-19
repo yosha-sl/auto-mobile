@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { VehicleResolver } from './vehicle.resolver';
 import { VehicleService } from './vehicle.service';
 
@@ -11,7 +9,7 @@ import { VehicleService } from './vehicle.service';
       typePaths: ['./src/**/*.graphql'],
     })
   ],
-  controllers: [AppController],
-  providers: [AppService, VehicleService, VehicleResolver],
+  controllers: [  ],
+  providers: [VehicleService, VehicleResolver],
 })
 export class AppModule {}

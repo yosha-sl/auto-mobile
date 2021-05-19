@@ -12,11 +12,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GraphQLModule } from './graphql.module';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { ToastsContainer } from './shared/component/toast/toasts-container.component';
+import { ModalComponent } from './shared/component/modal/modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToastsContainer
+    ToastsContainer,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +34,7 @@ import { ToastsContainer } from './shared/component/toast/toasts-container.compo
     VehicleModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ModalComponent]
 })
 export class AppModule { }

@@ -1,56 +1,72 @@
-
 <div class="container-fluid p-5">
 
- 
-
-  <div class="row">
-    <div class="col-md-6">
-      <button class="btn btn-success m-2" (click)="download()">Download</button>
-    </div>
-    <div class="col-md-6 text-right">
-      <button class="btn m-2"*ngIf="hasPreviousPage" (click)="fetchDataFromGateway(false, true)">
-        <i style="color: #2c49ee;font-size: 20px;" class="fas fa-angle-double-left"></i>
-      </button>
-  <button class="btn m-2" *ngIf="hasNextPage" (click)="fetchDataFromGateway(true, false)">
-    <i style="color: #2c49ee;font-size: 20px;" class="fas fa-angle-double-right"></i>
-  </button>
-     
-    </div>
-  </div>
-    
-    
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">First Name</th>
-          <th scope="col">Last Name</th>
-          <th scope="col">Manufactured Date</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let vehicle of vehiclesData; index as i">
-          <td >{{(vehicle.id)}}</td>
-          <td>{{vehicle.firstName}}</td>
-          <td>{{vehicle.lastName}}</td>
-          <td>{{vehicle.manufacturedDate}}</td>
-          <td class="text-right"> <button class="btn  m-1" (click)="onView(vehicle.id)"><i style="color: #00cf68;" class="far fa-edit"></i></button>
-          <button class="btn m-1" (click)="onDelete(vehicle.id)"><i style="color: #e71f30;" class="far fa-trash-alt"></i></button></td>
-        </tr>
-        
-      </tbody>
-    </table>
-    <div class="row">
-      <div class="col-md-12 text-right">
-        <button class="btn m-2"*ngIf="hasPreviousPage" (click)="fetchDataFromGateway(false, true)">
-          <i class="fas fa-angle-double-left"></i>
+  <div class="row m-3">
+    <div class="col-md-12 px-5">
+      <div class="input-group mb-3">
+        <input type="text" #inputValue class="form-control mr-1" placeholder="Filter"
+        (keyup)="onSearch(inputValue.value, false, false)">
+        <button class="btn btn-primary" (click)="onSearch(inputValue.value, false, false)">
+          <i class="fas fa-search"></i>
         </button>
-    <button class="btn m-2" *ngIf="hasNextPage" (click)="fetchDataFromGateway(true, false)">
-      <i class="fas fa-angle-double-right"></i>
-    </button>
       </div>
     </div>
   </div>
 
-  
+  <div class="row">
+    <div class="col-md-10 text-right">
+      <button class="btn btn-success m-2" (click)="onOpenConfirmationModal('456456', 'kJJDJDJ')">
+        <i class="fas fa-download"></i>
+      </button>
+    </div>
+    <div class="col-md-2 text-right">
+      <button class="btn m-2" *ngIf="hasPreviousPage" (click)="onSearch(inputValue.value,false, true)">
+        <i style="color: #2c49ee;font-size: 20px;" class="fas fa-angle-double-left"></i>
+      </button>
+      <button class="btn m-2" *ngIf="hasNextPage" (click)="onSearch(inputValue.value,true, false)">
+        <i style="color: #2c49ee;font-size: 20px;" class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
+  </div>
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Car Make</th>
+        <th scope="col">Manufactured Date</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vehicle of vehiclesData; index as i">
+        <td>{{(vehicle.id)}}</td>
+        <td>{{vehicle.firstName}}</td>
+        <td>{{vehicle.lastName}}</td>
+        <td>{{vehicle.carMake}}</td>
+        <td>{{vehicle.manufacturedDate}}</td>
+        <td class="text-right">
+          <button class="btn  m-1" (click)="onView(vehicle.id)">
+            <i style="color: #00cf68;" class="far fa-edit"></i>
+          </button>
+          <button class="btn m-1" (click)="onOpenConfirmationModal(vehicle.id, vehicle.carMake)">
+            <i style="color: #e71f30;" class="far fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-12 text-right">
+      <button class="btn m-2" *ngIf="hasPreviousPage" (click)="fetchDataFromGateway(false, true)">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      <button class="btn m-2" *ngIf="hasNextPage" (click)="fetchDataFromGateway(true, false)">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

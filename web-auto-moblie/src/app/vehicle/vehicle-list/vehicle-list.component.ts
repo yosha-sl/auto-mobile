@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalComponent } from 'src/app/shared/component/modal/modal.component';
 import { VehicleService } from '../vehicle.service';
 
 
@@ -19,29 +21,13 @@ export class VehicleListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
-    // this.apollo
-    //   .query<any>({
-    //     query: gql`
-    //       {
-    //         vehicles{
-    //           id,
-    //           firstName,
-    //           lastName
-    //         }
-    //       }
-    //     `
-    //   })
-    //   .subscribe(
-    //     ({ data, loading }) => {
-    //      this.vehiclesData = data.vehicles;
-    //     }
-    //   );
     this.fetchDataFromGateway(false, false);
-
+    this.onSearch("", false, false);
   }
 
   fetchDataFromGateway(isNext: boolean, isPrevious: boolean) {
@@ -73,7 +59,35 @@ export class VehicleListComponent implements OnInit {
     });
   }
 
-  download(){
+  download() {
     this.vehicleService.download();
+  }
+
+  onOpenConfirmationModal(vehicleID, vehicleName) {
+    const modalRef = this.modalService.open(ModalComponent);
+    modalRef.componentInstance.vehicleDetails = `${vehicleID} | ${vehicleName}`;
+    modalRef.componentInstance.passStatus.subscribe((result: boolean) => {
+      if (result) {
+        this.onDelete(vehicleID);
+      }
+    });
+  }
+
+  onSearch(val, isNext, isPrevious) {
+    this.vehicleService.filter({
+      isNext: isNext,
+      isPrevious: isPrevious,
+      hasNextPage: this.hasNextPage,
+      hasPreviousPage: this.hasPreviousPage,
+      carMake: val,
+      endCursor: this.endCursor,
+      startCursor: this.startCursor
+    }).subscribe((res: any) => {
+      this.vehiclesData = res.data.allVehicles.nodes;
+      this.hasNextPage = res.data.allVehicles.pageInfo.hasNextPage;
+      this.hasPreviousPage = res.data.allVehicles.pageInfo.hasPreviousPage;
+      this.endCursor = res.data.allVehicles.pageInfo.endCursor;
+      this.startCursor = res.data.allVehicles.pageInfo.startCursor;
+    });
   }
 }

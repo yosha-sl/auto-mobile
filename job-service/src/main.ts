@@ -5,9 +5,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
-  // const microservice = app.connectMicroservice({
-  //   transport: Transport.TCP,
-  // });
   const microserviceTcp = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,
     options: {

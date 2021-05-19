@@ -30,7 +30,6 @@ export class VehicleService {
             //this.logger.log(`${index} First Name : ${v.firstName} | Last Name : ${v.lastName}`);
         });
         this.vehicleRepository.save(newList);
-        return;
     }
 
     createVehicleCSVMigrationJob(file, skid) {

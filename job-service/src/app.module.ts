@@ -3,7 +3,6 @@ import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { ormConfig } from "./orm.comfig";
-import { CSVDownloadController } from './socket.controller';
 
 @Module({
   imports: [BullModule.forRoot({
@@ -13,10 +12,9 @@ import { CSVDownloadController } from './socket.controller';
     }
   }),
   VehicleModule,
-  TypeOrmModule.forRoot(ormConfig),
-
+  TypeOrmModule.forRoot(ormConfig)
   ],
-  controllers: [CSVDownloadController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}

@@ -1,18 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
+import { UpdateVehicleInput } from 'src/app/graphql/vehicle/update-vehicle-input.model';
+import { Vehicle } from '../vehicle.model';
 import { VehicleService } from '../vehicle.service';
 
-export class Vehicle {
-  public id: number;
-  public firstName: string;
-  public lastName: string;
-  public email: string;
-  public carMake: string;
-  public carModel: string;
-  public vinNumber: string;
-  public manufacturedDate: string;
-}
 
 @Component({
   selector: 'app-vehicle-view',
@@ -21,7 +13,7 @@ export class Vehicle {
 })
 export class VehicleViewComponent implements OnInit {
 
-  public vehicle: Vehicle;
+  public vehicle: any;
   public id = '';
 
   constructor(
@@ -32,30 +24,10 @@ export class VehicleViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') ? this.route.snapshot.paramMap.get('id') : '';
-    console.log(this.route.snapshot.paramMap.get('id'));
-    if (this.id != '') { this.findVehicleById(this.id) } else { this.vehicle = new Vehicle };
-    // this.apollo
-    //   .query<any>({
-    //     query: gql`
-    //       {
-    //         vehicleById(id: ${id}){
-    //           id,
-    //           firstName,
-    //           lastName,
-    //           email,
-    //           carMake,
-    //           carModel,
-    //           vinNumber,
-    //           manufactured_date,
-    //         }
-    //       }
-    //     `
-    //   })
-    //   .subscribe(
-    //     ({ data, loading }) => {
-    //       this.vehicle = data.vehicle;
-    //     }
-    //   );
+    if (this.id != '') { 
+      this.vehicle = new UpdateVehicleInput();
+      this.findVehicleById(this.id) ;
+    } else { this.vehicle = new Vehicle };
   }
 
   onSubmit() {
@@ -64,7 +36,15 @@ export class VehicleViewComponent implements OnInit {
 
   findVehicleById(id) {
     this.vehicleService.findById(id).subscribe((res: any) => {
-      this.vehicle = res.data.vehicleById;
+      let tempVehicle = res.data.vehicleById;
+      this.vehicle.id = tempVehicle.id;
+      this.vehicle.firstName = tempVehicle.firstName;
+      this.vehicle.lastName = tempVehicle.lastName;
+      this.vehicle.carMake = tempVehicle.carMake;
+      this.vehicle.carModel = tempVehicle.carModel;
+      this.vehicle.manufacturedDate = tempVehicle.manufacturedDate;
+      this.vehicle.email = tempVehicle.email;
+      this.vehicle.vinNumber = tempVehicle.vinNumber;
     });
   }
 

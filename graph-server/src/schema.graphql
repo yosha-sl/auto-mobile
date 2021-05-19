@@ -10,7 +10,7 @@ type Vehicle {
 }
   
 type Query {
-  allVehicles(filter:VehicleFilter): [Vehicle!]!
+  allVehicles(filter:VehicleFilter, first:Int, last:Int, after:String, before:String, orderBy:VehicleOrderBy): Node
   allVehiclesByLimitAndOrder(first:Int, last:Int, after:String, before:String, orderBy:VehicleOrderBy):Node
   vehicleById(id: Int!): Vehicle!
 }

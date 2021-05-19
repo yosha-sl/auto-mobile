@@ -33,16 +33,6 @@ export class VehicleController{
     @Header('Content-Disposition', 'attachment; filename=*custom_name*.csv')
     getGeneratedCSV(@Res() res: Response, @Body() vehicleDetails: any) {
         console.log('getGeneratedCSV');
-        
         return;
     }
-
-    
-
-    // @Get('toServer')
-    // callToServer(){
-    //     console.log('Calling');
-    //     this.vehicleService.callToServer(undefined,);
-
-    // }
 }
