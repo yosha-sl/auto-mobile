@@ -1,6 +1,5 @@
 import { InjectQueue } from "@nestjs/bull";
 import { Injectable, Logger } from "@nestjs/common";
-import { Client, ClientProxy, Transport } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Queue } from "bull";
 import { from } from "rxjs";
@@ -8,7 +7,6 @@ import { Repository } from "typeorm";
 import { VehicleDTO } from "./vehicle.dto";
 import { Vehicle } from "./vehicle.entity";
 import fetch from 'cross-fetch';
-import { Response } from "express";
 
 @Injectable()
 export class VehicleService {
@@ -36,9 +34,8 @@ export class VehicleService {
         this.migrationQueue.add('migrate', { file: file, userSocketId: skid });
     }
 
-    downloadVehicleDetailsCSVJob(dataList, skid) {
-        console.log('add to queue');
-        this.genarateQueue.add('csv_download', { data: dataList, userSocketId: skid });
+    downloadVehicleDetailsCSVJob(filter, skid) {
+        this.genarateQueue.add('csv_download', { filter: filter, userSocketId: skid });
     }
 
     callToServer(q/* chage */, skid) {

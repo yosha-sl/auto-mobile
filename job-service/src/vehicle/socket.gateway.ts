@@ -22,8 +22,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
     }
 
-    notifyUserToTranformationCompleted(uuid: string): void {
-        this.socket.transmitPublish(uuid, 'Transformation Completed');
+    notifyUserToTranformationCompleted(uuid: string, message): void {
+        this.socket.transmitPublish(uuid, message);
     }
 
 

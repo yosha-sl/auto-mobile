@@ -2,13 +2,13 @@ import { BullModule } from "@nestjs/bull";
 import { CacheModule, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CsvModule } from "nest-csv-parser";
-import { from } from "rxjs";
 import { SocketGateway } from "./socket.gateway";
 import { VehicleDetailsMigrationProcessor } from "./vehicle-details-migration.processor";
 import { VehicleDetailsDownloadProcessor } from "./csv-generator.processor";
 import { VehicleController } from "./vehicle.controller";
 import { Vehicle } from "./vehicle.entity";
 import { VehicleService } from "./vehicle.service";
+import { VehicleGraphService } from "./vehicle-graph.service";
 
 
 @Module({
@@ -25,7 +25,7 @@ import { VehicleService } from "./vehicle.service";
     controllers : [VehicleController],
     providers :[VehicleDetailsMigrationProcessor,
         VehicleDetailsDownloadProcessor ,
-        VehicleService, SocketGateway]
+        VehicleService, SocketGateway, VehicleGraphService]
 })
 export class VehicleModule{
 

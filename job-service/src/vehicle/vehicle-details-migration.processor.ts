@@ -33,6 +33,6 @@ export class VehicleDetailsMigrationProcessor {
 
     @OnQueueCompleted()
     onCompleted(job: Job, result: any) {
-        this.gateway.notifyUserToTranformationCompleted(job.data.userSocketId);
+        this.gateway.notifyUserToTranformationCompleted(job.data.userSocketId, 'Transformation Completed');
     }
 }

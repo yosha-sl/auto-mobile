@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Apollo } from 'apollo-angular';
 import { UpdateVehicleInput } from 'src/app/graphql/vehicle/update-vehicle-input.model';
 import { Vehicle } from '../vehicle.model';
 import { VehicleService } from '../vehicle.service';

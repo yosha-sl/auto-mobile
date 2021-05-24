@@ -115,11 +115,13 @@ export class VehicleService {
     });
   }
 
-  download() {
+  download(filterVal) {
+    
     return this.http.post(`${environment.baseURL}/files/download`,
       {
         vehicles: 'nodata',
-        skid: sessionStorage.getItem('skid')
+        skid: sessionStorage.getItem('skid'),
+        filter: filterVal
       }
     ).subscribe(res => {
       console.log(res);

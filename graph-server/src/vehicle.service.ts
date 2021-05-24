@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import fetch from 'cross-fetch';
 
 
@@ -7,16 +7,18 @@ const URL = 'http://localhost:5000/graphql';
 @Injectable()
 export class VehicleService {
 
-  async findAll(filter:any,first, last, after, before,orderBy) {
-
+  async findAll(filter: any, first, last, after, before, orderBy) {
+    if (filter == null) {
+      throw new NotFoundException('filter found.');
+    }
     const query = `
         {query{
             allVehicles(
               filter:{ carMake: { includesInsensitive: "${filter.carMake.includesInsensitive}" } },
-              ${first?('first:'+first+','):''}
-              ${last?('last:'+last+','):''}
-              ${after?('after:"'+after+'",'):''}
-              ${before?('before:"'+before+'",'):''}
+              ${first ? ('first:' + first + ',') : ''}
+              ${last ? ('last:' + last + ',') : ''}
+              ${after ? ('after:"' + after + '",') : ''}
+              ${before ? ('before:"' + before + '",') : ''}
               orderBy:${orderBy}
               ){
                 nodes{
@@ -38,19 +40,19 @@ export class VehicleService {
               }
           }}
         `;
-        
+
     let result = await this.fetchData(query);
     return result.data.query.allVehicles;
   }
 
-  async findAllByLimitAndOrder(first, last, after, before,orderBy) {
+  async findAllByLimitAndOrder(first, last, after, before, orderBy) {
     const query = `
         {query{
             allVehicles(
-              ${first?('first:'+first+','):''}
-              ${last?('last:'+last+','):''}
-              ${after?('after:"'+after+'",'):''}
-              ${before?('before:"'+before+'",'):''}
+              ${first ? ('first:' + first + ',') : ''}
+              ${last ? ('last:' + last + ',') : ''}
+              ${after ? ('after:"' + after + '",') : ''}
+              ${before ? ('before:"' + before + '",') : ''}
               orderBy:${orderBy}
               ){
                 nodes{
@@ -97,6 +99,7 @@ export class VehicleService {
 
   async create(vehicle) {
 
+
     const query = `
     mutation {
       createVehicle(
@@ -128,6 +131,7 @@ export class VehicleService {
         `;
     let result = await this.fetchData(query);
     return result.data.createVehicle.vehicle;
+
   }
 
   async update(id, vehicle) {

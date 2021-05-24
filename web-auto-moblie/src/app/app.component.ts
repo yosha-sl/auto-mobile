@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
 
     let channel = socket.subscribe(skid);
     for await (let data of channel) {
-      this.showSuccess("CSV Migration Completed");
+      this.showSuccess(data);
     }
   }
 

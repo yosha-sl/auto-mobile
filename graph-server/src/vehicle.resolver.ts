@@ -1,12 +1,16 @@
 import { Inject } from '@nestjs/common';
 import { Args, Int, Mutation, Query } from '@nestjs/graphql';
 import { Resolver } from '@nestjs/graphql';
+import { VehicleAPIService } from './vehicle-api.service';
 import { VehicleService } from './vehicle.service';
 
 @Resolver()
 export class VehicleResolver {
 
-    constructor(private vehicleService: VehicleService) { }
+    constructor(
+        private vehicleService: VehicleService,
+        private vehicleAPIService:VehicleAPIService
+    ) { }
 
     @Query()
     async allVehicles(
@@ -17,7 +21,7 @@ export class VehicleResolver {
         @Args('before') before: string,
         @Args('orderBy') orderBy: any
     ) {
-        return this.vehicleService.findAll(filter,first,last,after,before,orderBy);
+        return this.vehicleService.findAll(filter, first, last, after, before, orderBy);
     }
 
     @Query()
@@ -28,13 +32,13 @@ export class VehicleResolver {
         @Args('before') before: string,
         @Args('orderBy') orderBy: any
     ) {
-    
-        return this.vehicleService.findAllByLimitAndOrder(first,last,after,before,orderBy);
+
+        return this.vehicleService.findAllByLimitAndOrder(first, last, after, before, orderBy);
     }
 
     @Query()
     async vehicleById(@Args('id', { type: () => Int }) id: number) {
-        return this.vehicleService.findOne(id);
+        return this.vehicleAPIService.findOneBy(id);
     }
 
     @Mutation()

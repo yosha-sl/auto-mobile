@@ -19,12 +19,10 @@ export class VehicleController{
     }
 
     @Post("download")
-    // @Header('Content-Type', 'text/csv')
-    // @Header('Content-Disposition', 'attachment; filename=*custom_name*.csv')
-    downloadCSV(@Res() res: Response, @Body() vehicleDetails: any) {
-        console.log('Request');
-        //this.vehicleService.downloadVehicleDetailsCSVJob(vehicleDetails.vehicles, vehicleDetails.skid);
-        this.vehicleService.callToServer(undefined, vehicleDetails.skid);
+    downloadCSV(@Body() body: any) {
+        console.log(body.filter);
+        this.vehicleService.downloadVehicleDetailsCSVJob(body.filter, body.skid);
+        //this.vehicleService.callToServer(undefined, vehicleDetails.skid);
         return "OK";
     }
 

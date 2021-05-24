@@ -19,6 +19,8 @@ export class VehicleListComponent implements OnInit {
   endCursor = null;
   startCursor = null;
 
+  readyToDownload = false;
+
   constructor(
     private router: Router,
     private vehicleService: VehicleService,
@@ -59,8 +61,9 @@ export class VehicleListComponent implements OnInit {
     });
   }
 
-  download() {
-    this.vehicleService.download();
+  download(filterVal) {
+    this.readyToDownload = false;
+    this.vehicleService.download(filterVal);
   }
 
   onOpenConfirmationModal(vehicleID, vehicleName) {
